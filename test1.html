@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>jQuery basic setup</title>
+
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+    <script type="text/javascript" src="js/TweenMax.min.js"></script>
+
+    <style type="text/css">
+        .box
+        {
+            position: absolute;
+            background-color: #3333cc;
+            border-radius: 5% 5%;
+            outline: 1px solid transparent;
+        }
+    </style>
+
+    <script type="text/javascript">
+        $(document).ready(init);
+
+        function init()
+        {
+            console.log("init");
+
+            var size = 100;
+            var gap = 5;
+            var total = 36;
+            var cols = 6;
+
+            for (var i = 0; i < total; i++)
+            {
+                var box = document.createElement("div");
+                box.checked = false;
+                box.setAttribute("class", "box");
+                box.style.width = size + "px";
+                box.style.height = size + "px";
+                box.style.left = gap + i % cols * (size + gap) + "px";
+                box.style.top = gap + (i / cols | 0) * (size + gap) + "px";
+                box.addEventListener("mousedown", boxTap);
+                box.addEventListener("touchstart", boxTap);
+                document.body.appendChild(box);
+
+                TweenMax.from(box, .5, {
+                    delay:1 + i * .05,
+                    css:{
+                        rotationY:"+=180",
+                        backgroundColor:"rgba(255, 255, 255, 0)"
+                    }, ease:Back.easeOut
+                });
+            }
+
+            CSSPlugin.defaultTransformPerspective = 500;
+        }
+
+        function boxTap(e)
+        {
+            console.log("boxTap " + e.type);
+
+            e.preventDefault();
+
+            var box = e.target;
+
+            if(!TweenMax.isTweening(box))
+            {
+                TweenMax.to(box, 0.5, {
+                    css:{
+                        rotationY:(!box.checked) ? "+=180" : "-=180",
+                        backgroundColor:(!box.checked) ? "#ff6600" : "#3333cc",
+                    }, ease:Back.easeOut, onComplete:function(){box.checked = !box.checked;}
+                });
+            }
+        }
+    </script>
+</head>
+<body>
+</body>
+</html>

@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>cssBlur</title>
+
+    <script type="text/javascript" src="js/TweenMax.min.js"></script>
+
+    <style type="text/css">
+        .box
+        {
+            position: absolute;
+            background-color: #33c;
+            border-radius: 5% 5%;
+            visibility: visible;
+        }
+    </style>
+
+    <script type="text/javascript">
+        function init()
+        {
+            console.log("init");
+
+            CSSPlugin.defaultTransformPerspective = 500;
+
+            var size = 100;
+            var gap = 5;
+            var total = 36;
+            var cols = 6;
+
+            for (var i = 0; i < total; i++)
+            {
+                var box = document.createElement("div");
+                box.setAttribute("class", "box");
+                box.style.width = size + "px";
+                box.style.height = size + "px";
+                box.style.left = gap + i % cols * (size + gap) + "px";
+                box.style.top = gap + (i / cols | 0) * (size + gap) + "px";
+                // box.addEventListener("mousedown", boxTap);
+                // box.addEventListener("touchstart", boxTap);
+                document.body.appendChild(box);
+                TweenMax.to(box, 1, {css:{rotationY:-180, autoAlpha:0, transformOrigin:"left"}, delay:1 + i * .02, ease:Cubic.easeIn});
+            }
+        }
+    </script>
+</head>
+<body onload="init();">
+</body>
+</html>

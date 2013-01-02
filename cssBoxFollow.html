@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>HTML5 Example</title>
+
+    <script type="text/javascript" src="js/TweenMax.min.js"></script>
+
+    <style type="text/css">
+        .box
+        {
+            position: absolute;
+            background-color: #3333cc;
+            border-radius: 5% 5%;
+            width: 100px;
+            height: 100px;
+            outline: 1px solid transparent;
+        }
+    </style>
+
+    <script type="text/javascript">
+        var box, mouseX = 0, mouseY = 0;
+
+        function init()
+        {
+            box = document.createElement("box");
+            box.setAttribute("class", "box");
+            box.x = 100;
+            box.y = 100;
+            box.vx = 0;
+            box.vy = 0;
+            box.style.left = box.x + "px";
+            box.style.top = box.y + "px";
+            document.body.appendChild(box);
+
+//            boxTween = TweenMax.to(box, 1, {css:{left:200, top:200}, ease:Sine.easeInOut});
+
+            document.addEventListener("touchmove", docTap);
+            document.addEventListener("mousemove", docTap);
+
+            TweenMax.ticker.addEventListener("tick", tick);
+        }
+
+        function tick()
+        {
+            // elastic to
+            box.vx += ((mouseX - box.x) * .05);
+            box.vy += ((mouseY - box.y) * .05);
+
+            // increase decimal value to create more spring
+            box.x += box.vx *= .8;
+            box.y += box.vy *= .8;
+
+            box.style.left = box.x - 50 + "px";
+            box.style.top = box.y - 50 + "px";
+        }
+
+        function docTap(e)
+        {
+            e.preventDefault();
+
+            mouseX = e.pageX;
+            mouseY = e.pageY;
+
+//            console.log(box.yDiff);
+
+//            boxTween.updateTo({css:{left:e.pageX, top:e.pageY}}, true);
+        }
+    </script>
+</head>
+<body onload="init()">
+</body>
+</html>
