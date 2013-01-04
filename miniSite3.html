@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="en">
+<head>
+<title>mini site</title>
+
+<script type="text/javascript" src="js/TweenMax.min.js"></script>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+
+<style type="text/css">
+    body
+    {
+        margin: 0;
+    }
+
+    @font-face
+    {
+        font-family: navFont;
+        src: url('fonts/simplicity.ttf');
+        font-weight: normal;
+        font-style: normal;
+    }
+
+    .navBar
+    {
+        position: relative;
+        width: 100%;
+        height: 100px;
+        background-color: #d3d3d3;
+        text-align: center;
+        /*border-radius: 50% 50%;*/
+        /*outline: 1px solid blue transparent;*/
+    }
+
+    .navItem
+    {
+        font-family: navFont;
+        font-size: 28px;
+        padding: 15px;
+        line-height: 100px;
+        color: #555;
+        text-decoration: none;
+
+        background-color: #a9a9a9;
+    }
+
+    .navItemSelected
+    {
+        font-family: navFont;
+        font-size: 28px;
+        padding: 15px;
+        line-height: 100px;
+        color: #d3d3d3;
+        text-decoration: none;
+
+        background-color: #777;
+    }
+
+    .content
+    {
+        position: relative;
+        width: 100%;
+        height: 100px;
+        border: 1px solid black;
+    }
+
+        /*iphone5*/
+    @media only screen and (-webkit-min-device-pixel-ratio: 2)
+    {
+        .navItem
+        {
+            font-size: 72px;
+            line-height: 140px;
+        }
+
+        .navItemSelected
+        {
+            font-size: 90px;
+            line-height: 140px;
+        }
+
+        .navBar
+        {
+            height: 140px;
+        }
+    }
+
+        /*desktop*/
+    @media screen and (min-width: 1224px)
+    {
+
+    }
+</style>
+
+<script type="text/javascript">
+    var navContentArray = ["example 1", "example 2", "example 3"], navItemsObj = {}, content, example;
+
+    function init()
+    {
+        console.log("init");
+
+        var doc = document;
+
+        var nav = doc.createElement("nav");
+        nav.setAttribute("class", "navBar");
+        doc.body.appendChild(nav);
+
+        // create nav
+        for (var i = 0; i < navContentArray.length; i++)
+        {
+            var ni = doc.createElement("a");
+            ni.index = i;
+            ni.setAttribute("class", "navItem");
+            ni.setAttribute("href", "#" + navContentArray[i]);
+            ni.textContent = navContentArray[i];
+            ni.addEventListener("mouseover", navItemEvent);
+            ni.addEventListener("mouseout", navItemEvent);
+//                ni.addEventListener("touchstart", changeContent);
+            navItemsObj[navContentArray[i]] = ni;
+            nav.appendChild(ni);
+        }
+
+        // create content
+        content = doc.createElement("div");
+        content.setAttribute("class", "content");
+        doc.body.appendChild(content);
+
+        window.addEventListener("hashchange", changeContent);
+
+        changeContent(null);
+    }
+
+    function navItemEvent(e)
+    {
+        var ni = e.target;
+
+        if (!ni.checked)
+        {
+            if (e.type == "mouseover")
+                tweenNavItem(ni, "over");
+            else
+                tweenNavItem(ni, "out");
+        }
+    }
+
+    function changeContent(e)
+    {
+        var pageId = document.URL.substr(document.URL.lastIndexOf("#") + 1).replace(/%20/g, " ");
+
+//        console.log("changeContent " + pageId);
+
+        var selectedNi = navItemsObj[pageId];
+
+        if (!selectedNi)
+        {
+            window.location.hash = navContentArray[0];
+            return;
+        }
+
+        for (var i = 0, ni; i < navContentArray.length; i++)
+        {
+            ni = navItemsObj[navContentArray[i]];
+            ni.checked = (ni == selectedNi);
+
+            if (ni.checked)
+                tweenNavItem(ni, "selected");
+            else
+                tweenNavItem(ni, "out");
+        }
+
+//        console.log("load content for " + selectedNi.index);
+
+        // clear last example
+        if (example)
+        {
+            example.remove();
+            example = undefined;
+        }
+
+//            console.log("LOAD JS");
+        $.getScript("js/Example" + (selectedNi.index + 1) + ".js", function ()
+        {
+            example = new hothouse["Example" + (selectedNi.index + 1)](content);
+        });
+    }
+
+    function tweenNavItem(ni, state)
+    {
+        switch (state)
+        {
+            case "over" :
+                TweenMax.to(ni, .25, {css:{backgroundColor:"#666", paddingTop:"20px", paddingBottom:"20px", color:"#f5f5f5"}, ease:Sine.easeOut});
+                break;
+            case "out" :
+                TweenMax.to(ni, .25, {css:{backgroundColor:"#a9a9a9", padding:"15px", color:"#555"}, delay:.1, ease:Sine.easeOut});
+                break;
+            case "selected" :
+                TweenMax.to(ni, .25, {css:{backgroundColor:"#777", padding:"15px", color:"#d3d3d3"}, delay:.1, ease:Sine.easeOut});
+                break;
+            default :
+            //
+        }
+    }
+</script>
+</head>
+<body onload="init()">
+</body>
+</html>
