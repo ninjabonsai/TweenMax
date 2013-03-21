@@ -6,7 +6,7 @@ this.hothouse = this.hothouse || {};
     // constructor
     function Example1(content)
     {
-        console.log("Example1 " + content.innerHTML);
+        console.log("Example1");
 
         p.content = content;
 
@@ -76,6 +76,8 @@ this.hothouse = this.hothouse || {};
         this.content.removeEventListener("touchmove", mouseEvent);
         this.content.removeChild(this.box);
         this.content = undefined;
+
+        hothouse.Example1 = null;
     }
 
     hothouse.Example1 = Example1;

@@ -6,7 +6,7 @@ this.hothouse = this.hothouse || {};
     // constructor
     function Example3(content)
     {
-        console.log("Example3 " + content.innerHTML);
+        console.log("Example3");
 
         this.content = content;
 
@@ -33,6 +33,8 @@ this.hothouse = this.hothouse || {};
 
         this.content.innerHTML = "";
         this.content = undefined;
+
+        hothouse.Example3 = null;
     }
 
     hothouse.Example3 = Example3;

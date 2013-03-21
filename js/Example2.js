@@ -6,7 +6,7 @@ this.hothouse = this.hothouse || {};
     // constructor
     function Example2(content)
     {
-        console.log("Example2 " + content.innerHTML);
+        console.log("Example2");
 
         this.content = content;
 
@@ -24,7 +24,7 @@ this.hothouse = this.hothouse || {};
     {
         console.log("init");
 
-        this.content.innerHTML = "Example 2";
+        this.content.innerHTML = "<p>Example 2</p>";
 //        this.content.addEventListener("mousemove", mouseEvent);
     }
 
@@ -40,6 +40,8 @@ this.hothouse = this.hothouse || {};
         this.content.innerHTML = "";
 //        this.content.removeEventListener("mousemove", mouseEvent);
         this.content = undefined;
+
+        hothouse.Example2 = null;
     }
 
     hothouse.Example2 = Example2;
